@@ -30,6 +30,16 @@ let hasVoted = false;
 
 function init() {
     renderCards();
+    
+    // Checar bloqueio diário de votos (Opção A)
+    const lastVote = localStorage.getItem('abpmp_last_vote_date');
+    const today = new Date().toDateString();
+    
+    if (lastVote === today) {
+        hasVoted = true;
+        // Já votou hoje, revela botoes desabilitados silenciosamente
+        revealResults(true);
+    }
 }
 
 function handleImageError(img, fallbackSrc) {
@@ -86,7 +96,8 @@ function vote(id) {
         if (GOOGLE_SHEETS_URL === "") {
             console.warn("Aviso: Voto salvo apenas localmente. Acesse script.js e defina a GOOGLE_SHEETS_URL!");
             hasVoted = true;
-            revealResults();
+            localStorage.setItem('abpmp_last_vote_date', new Date().toDateString());
+            revealResults(false);
             return;
         }
 
@@ -112,7 +123,8 @@ function vote(id) {
             })
         }).then(() => {
             // Sucesso
-            revealResults();
+            localStorage.setItem('abpmp_last_vote_date', new Date().toDateString());
+            revealResults(false);
         }).catch((error) => {
             console.error("Erro ao enviar voto: ", error);
             alert("Erro de conexão. Seu voto não pôde ser gravado.");
@@ -123,24 +135,30 @@ function vote(id) {
     }
 }
 
-function revealResults() {
-    const dataWithPercentages = calculatePercentages();
+function revealResults(isOnLoad = false) {
+    const dataWithPercentages = calculatePercentages(); // Dados mockados
 
-    // Mostrar banner de sucesso
-    const banner = document.getElementById('results-banner');
-    banner.classList.remove('hidden');
+    if (!isOnLoad) {
+        // Mostrar banner de sucesso apenas se acabou de votar
+        const banner = document.getElementById('results-banner');
+        if (banner) banner.classList.remove('hidden');
+    }
 
-    // Desabilitar botões e revelar overlays
+    // Desabilitar botões visualmente
     dataWithPercentages.forEach(candidate => {
         const btn = document.getElementById(`btn-${candidate.id}`);
-        btn.disabled = true;
-        btn.innerHTML = 'Voto Encerrado';
-        btn.style.opacity = '0.5';
-        btn.style.cursor = 'not-allowed';
-        btn.style.background = '#444';
+        if(btn) {
+            btn.disabled = true;
+            btn.innerHTML = 'Já Votou Hoje';
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            btn.style.background = '#444';
+        }
 
         const card = document.getElementById(`card-${candidate.id}`);
-        card.classList.add('show-results');
+        if(card) {
+            card.classList.add('show-results');
+        }
     });
 }
 
