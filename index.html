@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquete Oficial: Escolha o Mascote</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <main class="container">
+        <header class="header">
+            <img src="abpmp.jpg" alt="Logo ABPMP Ceará" class="header-logo">
+            <h1 class="title">Vote no seu <span class="highlight">Mascote</span> Favorito</h1>
+            <p class="subtitle">A ABPMP Ceará quer saber sua opinião! Selecione o candidato que melhor representa nossa visão de processos.</p>
+        </header>
+
+        <section id="cards-container" class="cards-grid">
+            <!-- Cards serão injetados via JS -->
+        </section>
+
+        <div id="results-banner" class="results-fade-in hidden">
+            <div class="success-icon">🎉</div>
+            <h2>Voto Registrado com Sucesso!</h2>
+            <p>Obrigado por participar. Os resultados parciais estão agora visíveis nos cards acima.</p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
