@@ -27,8 +27,15 @@ const candidatesData = [
 ];
 
 let hasVoted = false;
+let userIP = "IP Desconhecido"; // Variável em cache para a planilha
 
 function init() {
+    // Buscar IP do usuário de forma assíncrona assim que o site carrega
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => { userIP = data.ip; })
+        .catch(err => console.warn("Aviso: Bloqueador de anúncios limitou verificação de IP."));
+
     renderCards();
     
     // Checar bloqueio diário de votos (Opção A)
@@ -119,7 +126,8 @@ function vote(id) {
             body: JSON.stringify({
                 id: candidate.id,
                 name: candidate.name,
-                data: new Date().toISOString()
+                data: new Date().toISOString(),
+                ip: userIP
             })
         }).then(() => {
             // Sucesso
